@@ -84,7 +84,6 @@ module Jekyll
           end
         end
 
-
         def convert_allow_empty?
           @extname == ".svg" && @extname == File.extname(path)
         end
