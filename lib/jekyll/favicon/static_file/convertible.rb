@@ -66,18 +66,11 @@ module Jekyll
         # Jekyll::StaticFile method
         # add file creation instead of copying
         def copy_file(*args)
-          dest_path = args.last # The last argument is always dest_path
+          dest_path = args.last
           
           case @extname
           when ".svg"
-            if args.size == 2
-              # Handle the case when it's called with two parameters
-              path = args.first
-              FileUtils.mkdir_p(File.dirname(dest_path))
-              FileUtils.cp(path, dest_path)
-            else
-              super(dest_path)
-            end
+            super(dest_path)
           when ".ico", ".png"
             Utils.convert path, dest_path, convert
           else
