@@ -32,10 +32,12 @@ module Jekyll
         private
 
         # overrides Jekyll::StaticFile method
-        def copy_file(dest_path)
+        def copy_file(*args)
+          dest_path = args.last
+          
           # return unless mutable?
           # return super(dest_path) unless mutation.any?
-
+        
           File.write dest_path, mutated_content
         end
 
