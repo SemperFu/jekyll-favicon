@@ -32,13 +32,18 @@ module Jekyll
         private
 
         # overrides Jekyll::StaticFile method
-        def copy_file(dest_path)
-          # return unless mutable?
+        def copy_file(src_path = nil, dest_path = nil)
+           # return unless mutable?
           # return super(dest_path) unless mutation.any?
-
+          if dest_path.nil?
+            dest_path = src_path
+            src_path = path
+          end
+        
+          # The existing logic:
           File.write dest_path, mutated_content
         end
-
+        
         def mutated_content
           case @extname
           when ".json", ".webmanifest", ".manifest" then mutated_content_json
