@@ -68,11 +68,14 @@ module Jekyll
         def copy_file(*args)
           dest_path = args.last
           
+          # If called with two arguments, extract the source path
+          source_path = args.length == 2 ? args.first : path
+          
           case @extname
           when ".svg"
             super(dest_path)
           when ".ico", ".png"
-            Utils.convert path, dest_path, convert
+            Utils.convert source_path, dest_path, convert
           else
             Jekyll.logger.warn "Jekyll::Favicon: Can't generate " \
                               " #{dest_path}. Extension not supported."
