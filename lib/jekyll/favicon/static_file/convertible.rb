@@ -65,13 +65,25 @@ module Jekyll
 
         # Jekyll::StaticFile method
         # add file creation instead of copying
-        def copy_file(dest_path)
-          case @extname
-          when ".svg" then super(dest_path)
-          when ".ico", ".png"
-            Utils.convert path, dest_path, convert
-          else Jekyll.logger.warn "Jekyll::Favicon: Can't generate " \
-                                  " #{dest_path}. Extension not supported."
+        def copy_file(*args)
+          dest_path = args.last # The last argument is always dest_path
+        
+          if args.size == 1
+            # Handle the case when it's called with one parameter from the jekyll-favicon plugin itself
+            case @extname
+            when ".svg"
+              super(dest_path)
+            when ".ico", ".png"
+              Utils.convert path, dest_path, convert
+            else
+              Jekyll.logger.warn "Jekyll::Favicon: Can't generate " \
+                                 " #{dest_path}. Extension not supported."
+            end
+          elsif args.size == 2
+            # Handle the case when it's called with two parameters, likely from the jekyll-minifier or other plugins
+            source_path = args.first
+            FileUtils.mkdir_p(File.dirname(dest_path))
+            FileUtils.cp(source_path, dest_path)
           end
         end
 
